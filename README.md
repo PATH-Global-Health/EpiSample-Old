@@ -1,1 +1,1 @@
-# episample
+# EpiSample
