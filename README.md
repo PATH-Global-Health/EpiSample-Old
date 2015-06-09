@@ -1,6 +1,3 @@
-This Eclipse Android project has dependencies upon these other projects:
+## EpiSample
 
-opendatakit.playservices      https://mitchellsundt@code.google.com/p/opendatakit.playservices/
-Android Commons      https://github.com/MACEPA/Android-Common.git
-ProgressWheel      https://github.com/Todd-Davies/ProgressWheel.git
-
+EpiSample is an open-source Android application that builds off of ODK Survey and offers additional capabilities that enable mobile population-based epidemiological studies and surveys.
