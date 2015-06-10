@@ -56,7 +56,6 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 
 	private boolean mIsGPSOn = false;
 	private boolean mIsNetworkOn = false;
-	private boolean mIsPassiveOn = false;
 	
 	private boolean mHasAccelerometer = false;
 	private boolean mHasMagnetometer = false;
@@ -164,6 +163,22 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 
 		mAzimuthRadians = new AverageAngle(smoothing);
 		//mLowPassFilter = new LowPassFilter();
+		
+		for (final String provider : mLocationManager.getProviders(true)) {
+			if (LocationManager.GPS_PROVIDER.equals(provider)
+					|| LocationManager.NETWORK_PROVIDER.equals(provider)) {
+				if (mLocation == null) {
+					mLocation = mLocationManager.getLastKnownLocation(provider);
+				}
+
+				if (LocationManager.GPS_PROVIDER.equals(provider)) {
+					mIsGPSOn = true;
+				} else if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
+					mIsNetworkOn = true;
+				}
+			}
+		}
+		
 	}
 
 	// ==============================================================================================
@@ -186,24 +201,12 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 			deviceHasSensors = false;
 		}
 		
-		for (final String provider : mLocationManager.getProviders(true)) {
-			if (LocationManager.GPS_PROVIDER.equals(provider)
-					|| LocationManager.PASSIVE_PROVIDER.equals(provider)
-					|| LocationManager.NETWORK_PROVIDER.equals(provider)) {
-				if (mLocation == null) {
-					mLocation = mLocationManager.getLastKnownLocation(provider);
-				}
-
-				if (LocationManager.GPS_PROVIDER.equals(provider)) {
-					mIsGPSOn = true;
-				} else if (LocationManager.PASSIVE_PROVIDER.equals(provider)) {
-					mIsPassiveOn = true;
-				} else if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
-					mIsNetworkOn = true;
-				}
-
-				mLocationManager.requestLocationUpdates(provider, 0, 0, this);
-			}
+		if (isGpsProviderOn()) {
+			mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+		} 
+				
+		if (isNetworkOn()) {
+			mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 		}
 		
 		return deviceHasSensors;
@@ -224,10 +227,6 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 	
 	public boolean isGpsProviderOn() {
 		return mIsGPSOn;
-	}
-
-	public boolean isPassiveOn() {
-		return mIsPassiveOn;
 	}
 
 	public boolean isNetworkOn() {
@@ -370,8 +369,6 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 	public void onProviderEnabled(String provider) {
 		if (LocationManager.GPS_PROVIDER.equals(provider)) {
 			mIsGPSOn = true;
-		} else if (LocationManager.PASSIVE_PROVIDER.equals(provider)) {
-			mIsPassiveOn = true;
 		} else if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
 			mIsNetworkOn = true;
 		}
@@ -385,8 +382,6 @@ public class DirectionProvider implements SensorEventListener, LocationListener 
 	public void onProviderDisabled(String provider) {
 		if (LocationManager.GPS_PROVIDER.equals(provider)) {
 			mIsGPSOn = false;
-		} else if (LocationManager.PASSIVE_PROVIDER.equals(provider)) {
-			mIsPassiveOn = false;
 		} else if (LocationManager.NETWORK_PROVIDER.equals(provider)) {
 			mIsNetworkOn = false;
 		}

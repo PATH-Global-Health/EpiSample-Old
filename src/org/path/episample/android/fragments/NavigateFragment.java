@@ -242,8 +242,7 @@ public class NavigateFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		if (mDirectionProvider.isGpsProviderOn() == false
-				&& mDirectionProvider.isNetworkOn() == false
-				&& mDirectionProvider.isPassiveOn() == true) {
+				&& mDirectionProvider.isNetworkOn() == false) {
 			setSpinnerColor(Color.Black);
 			Toast.makeText(getActivity(),
 					getString(R.string.provider_disabled_error),
@@ -251,7 +250,7 @@ public class NavigateFragment extends ListFragment implements
 		} else {
 			setSpinnerColor(Color.Red);
 		}
-
+		
 		mInstances = new CensusListAdapter(getActivity());
 		setListAdapter(mInstances);
 		mRefreshLayout.setOnRefreshListener(onRefreshListener);
@@ -366,11 +365,10 @@ public class NavigateFragment extends ListFragment implements
 
 		mDirectionProvider.start();
 		if (mDirectionProvider.isGpsProviderOn()
-				|| mDirectionProvider.isNetworkOn()
-				|| mDirectionProvider.isPassiveOn()) {
+				|| mDirectionProvider.isNetworkOn()) {
 			mSignalQualitySpinner.spin();
 		}
-
+		
 		String get = PropertiesSingleton.getProperty("survey",
 				AdminPreferencesActivity.KEY_GPS_ACCURACY_THRESHOLDS);
 
@@ -483,8 +481,7 @@ public class NavigateFragment extends ListFragment implements
 	public void onProviderDisabled(String provider) {
 
 		if (mDirectionProvider.isGpsProviderOn() == false
-				&& mDirectionProvider.isNetworkOn() == false
-				&& mDirectionProvider.isPassiveOn() == false) {
+				&& mDirectionProvider.isNetworkOn() == false) {
 			updateNotification();
 
 			mSignalQualitySpinner.stopSpinning();
@@ -497,9 +494,8 @@ public class NavigateFragment extends ListFragment implements
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		if (mDirectionProvider.isGpsProviderOn() == true
-				|| mDirectionProvider.isNetworkOn() == true
-				|| mDirectionProvider.isPassiveOn()) {
+		if (mDirectionProvider.isGpsProviderOn()
+				|| mDirectionProvider.isNetworkOn()) {
 			updateNotification();
 			setSpinnerColor(Color.Red);
 			mSignalQualitySpinner.spin();

@@ -50,7 +50,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -406,8 +405,6 @@ public class CollectFragment extends Fragment implements LocationListener,
 			mMinutes = 0;
 			mSeconds = 30;
 		}
-
-		Log.d("Miki", "mDontFreeze = " + String.valueOf(mDontFreeze));
 
 		if (mDeviceHasLowQualityGPS == true && mDontFreeze == Freeze.False) {
 			mSignalQualitySpinner = mSmallSignalQualitySpinner;
