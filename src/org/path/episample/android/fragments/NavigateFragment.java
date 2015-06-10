@@ -366,6 +366,7 @@ public class NavigateFragment extends ListFragment implements
 		mDirectionProvider.start();
 		if (mDirectionProvider.isGpsProviderOn()
 				|| mDirectionProvider.isNetworkOn()) {
+			setSpinnerColor(Color.Red);
 			mSignalQualitySpinner.spin();
 		}
 		
@@ -426,8 +427,6 @@ public class NavigateFragment extends ListFragment implements
 
 		mSignalQualitySpinner.stopSpinning();
 		mSignalQualitySpinner.setText(getString(R.string.acc_value));
-
-		setSpinnerColor(Color.Red);
 	}
 
 	@Override
